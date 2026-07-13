@@ -34,3 +34,6 @@ npm-debug.log*
 .playwright-mcp/
 *.png
 
+
+# TS build info
+*.tsbuildinfo
