@@ -2,11 +2,15 @@ import type {
   AdvisorResponse,
   Analytics,
   AltAsset,
+  HealthScore,
   Investor,
+  Nudge,
   Portfolio,
+  QuizQuestion,
   RiskProfileResult,
   RiskQuestion,
   SystemStatus,
+  XRay,
 } from "./types";
 
 const BASE = "/api";
@@ -37,6 +41,10 @@ export const api = {
   submitRiskProfile: (id: string, answers: { question_id: string; option_index: number }[]) =>
     post<RiskProfileResult>(`/risk/profile/${id}`, { answers }),
   altAssets: (id: string) => get<AltAsset[]>(`/alt-assets/${id}`),
-  advisor: (id: string, message: string, history: { role: string; content: string }[]) =>
-    post<AdvisorResponse>("/advisor", { investor_id: id, message, history }),
+  advisor: (id: string, message: string, history: { role: string; content: string }[], lang = "en") =>
+    post<AdvisorResponse>("/advisor", { investor_id: id, message, history, lang }),
+  xray: (id: string) => get<XRay>(`/xray/${id}`),
+  healthScore: (id: string) => get<HealthScore>(`/health-score/${id}`),
+  nudges: (id: string) => get<Nudge[]>(`/nudges/${id}`),
+  quiz: (assetId: string) => get<QuizQuestion>(`/quiz/${assetId}`),
 };

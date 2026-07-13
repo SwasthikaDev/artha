@@ -7,19 +7,27 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+import { Link } from "react-router-dom";
 import { api } from "../api/client";
-import type { Portfolio } from "../api/types";
+import type { HealthScore, Nudge, Portfolio } from "../api/types";
 import { useApp } from "../App";
 import { assetTagClass, compactInr, inr, PALETTE, pct, upDown } from "../lib/format";
 
+const gradeColor = (grade: string) =>
+  grade?.startsWith("A") ? "var(--green)" : grade === "B" ? "#8ad4ff" : grade === "C" ? "var(--amber)" : "var(--red)";
+
 export default function Dashboard() {
-  const { investorId } = useApp();
+  const { investorId, profileVersion } = useApp();
   const [p, setP] = useState<Portfolio | null>(null);
+  const [health, setHealth] = useState<HealthScore | null>(null);
+  const [nudges, setNudges] = useState<Nudge[]>([]);
 
   useEffect(() => {
     setP(null);
     api.portfolio(investorId).then(setP).catch(() => {});
-  }, [investorId]);
+    api.healthScore(investorId).then(setHealth).catch(() => {});
+    api.nudges(investorId).then(setNudges).catch(() => {});
+  }, [investorId, profileVersion]);
 
   if (!p) return <div className="loading">Aggregating your holdings across brokers & depositories…</div>;
 
@@ -53,12 +61,36 @@ export default function Dashboard() {
           <div className={`value ${upDown(s.total_pnl)}`}>{inr(s.total_pnl)}</div>
           <div className={`delta ${upDown(s.total_pnl)}`}>{pct(s.total_pnl_pct)} overall</div>
         </div>
-        <div className="card stat">
-          <div className="label">Coverage</div>
-          <div className="value">{s.holdings_count}</div>
-          <div className="delta muted">holdings · {s.accounts.length} accounts</div>
-        </div>
+        <Link to="/health" className="card stat" style={{ textDecoration: "none", color: "inherit" }}>
+          <div className="label">Health Score</div>
+          <div className="value" style={{ color: health ? gradeColor(health.grade) : undefined }}>
+            {health ? health.grade : "…"}
+            {health && <span className="muted" style={{ fontSize: 15 }}> · {health.score}/100</span>}
+          </div>
+          <div className="delta muted">{s.holdings_count} holdings · {s.accounts.length} accounts →</div>
+        </Link>
       </div>
+
+      {/* Smart nudges */}
+      {nudges.length > 0 && (
+        <>
+          <div className="section-title">Smart Nudges</div>
+          <div className="grid cols-3">
+            {nudges.slice(0, 3).map((n, i) => (
+              <div className="card" key={i} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <span className="chip" style={{ alignSelf: "flex-start", textTransform: "capitalize" }}>{n.kind}</span>
+                <b style={{ fontSize: 14 }}>{n.title}</b>
+                <div className="muted" style={{ fontSize: 12, lineHeight: 1.5, flex: 1 }}>{n.detail}</div>
+                {n.cta && (
+                  <Link to={n.kind === "education" ? "/risk" : "/explore"} style={{ color: "var(--brand)", fontSize: 12, fontWeight: 700 }}>
+                    {n.cta} →
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       {/* Allocation + accounts */}
       <div className="grid cols-2" style={{ marginTop: 18 }}>

@@ -124,6 +124,76 @@ export interface AdvisorResponse {
   source: string;
 }
 
+export interface XRayExposure {
+  symbol: string;
+  name: string;
+  sector: string;
+  apparent_value: number;
+  apparent_pct: number;
+  true_value: number;
+  true_pct: number;
+  hidden_value: number;
+  via_funds: string[];
+  flag: boolean;
+}
+
+export interface XRaySectorExposure {
+  sector: string;
+  apparent_pct: number;
+  true_pct: number;
+  delta_pct: number;
+}
+
+export interface XRay {
+  exposures: XRayExposure[];
+  sector_exposures: XRaySectorExposure[];
+  top_hidden: XRayExposure[];
+  headline: string;
+  insights: string[];
+}
+
+export interface HealthComponent {
+  label: string;
+  score: number;
+  weight: number;
+  detail: string;
+}
+
+export interface ProtectionAlert {
+  severity: "high" | "medium" | "low";
+  title: string;
+  detail: string;
+  holding?: string | null;
+}
+
+export interface HealthScore {
+  score: number;
+  grade: string;
+  summary: string;
+  components: HealthComponent[];
+  protection_alerts: ProtectionAlert[];
+}
+
+export interface QuizOption {
+  label: string;
+  correct: boolean;
+}
+
+export interface QuizQuestion {
+  asset_id: string;
+  question: string;
+  options: QuizOption[];
+  explanation: string;
+}
+
+export interface Nudge {
+  kind: "gap" | "concentration" | "opportunity" | "education";
+  title: string;
+  detail: string;
+  cta: string;
+  asset_id?: string | null;
+}
+
 export interface SystemStatus {
   market_data: string;
   ai_advisor: string;

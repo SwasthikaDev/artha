@@ -12,4 +12,4 @@ def ask_advisor(req: AdvisorRequest):
     """Natural-language Q&A grounded on the investor's real portfolio + analytics."""
     portfolio = aggregation.build_portfolio(req.investor_id)
     analytics = analytics_svc.compute(portfolio.holdings)
-    return advisor_svc.answer(req.message, portfolio, analytics, req.history)
+    return advisor_svc.answer(req.message, portfolio, analytics, req.history, req.lang)

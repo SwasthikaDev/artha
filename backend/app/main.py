@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
-from app.routers import advisor, alt_assets, analytics, portfolio, risk  # noqa: E402
+from app.routers import advisor, alt_assets, analytics, insights, portfolio, risk  # noqa: E402
 from app.services import market_data  # noqa: E402
 
 app = FastAPI(
@@ -33,6 +33,7 @@ app.include_router(analytics.router)
 app.include_router(risk.router)
 app.include_router(alt_assets.router)
 app.include_router(advisor.router)
+app.include_router(insights.router)
 
 
 @app.get("/api/health", tags=["system"])

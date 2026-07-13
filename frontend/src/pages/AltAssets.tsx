@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/client";
-import type { AltAsset } from "../api/types";
+import type { AltAsset, QuizQuestion } from "../api/types";
 import { useApp } from "../App";
 import { compactInr, suitClass } from "../lib/format";
 
@@ -141,10 +141,59 @@ function EducationModal({ asset, onClose }: { asset: AltAsset; onClose: () => vo
           <span>— {asset.suitability_reason}</span>
         </div>
 
+        <QuizSection assetId={asset.id} />
+
         <button className="btn" style={{ marginTop: 18, width: "100%" }}>
           Invest (demo) — routes to partner RTA / exchange
         </button>
       </div>
     </div>
+  );
+}
+
+function QuizSection({ assetId }: { assetId: string }) {
+  const [quiz, setQuiz] = useState<QuizQuestion | null>(null);
+  const [picked, setPicked] = useState<number | null>(null);
+
+  useEffect(() => {
+    setPicked(null);
+    setQuiz(null);
+    api.quiz(assetId).then(setQuiz).catch(() => setQuiz(null));
+  }, [assetId]);
+
+  if (!quiz) return null;
+
+  return (
+    <>
+      <div className="section-title">Quick Check — Do you understand this?</div>
+      <div className="q" style={{ fontWeight: 700, fontSize: 14, marginBottom: 10 }}>{quiz.question}</div>
+      <div className="options">
+        {quiz.options.map((opt, i) => {
+          const revealed = picked !== null;
+          const isPicked = picked === i;
+          let bg: string | undefined;
+          let border: string | undefined;
+          if (revealed && opt.correct) { bg = "rgba(62,207,142,0.14)"; border = "var(--green)"; }
+          else if (revealed && isPicked && !opt.correct) { bg = "rgba(255,107,107,0.14)"; border = "var(--red)"; }
+          return (
+            <div
+              key={i}
+              className="option"
+              style={{ background: bg, borderColor: border }}
+              onClick={() => picked === null && setPicked(i)}
+            >
+              {opt.label}
+              {revealed && opt.correct && " ✓"}
+              {revealed && isPicked && !opt.correct && " ✕"}
+            </div>
+          );
+        })}
+      </div>
+      {picked !== null && (
+        <div className="insight" style={{ marginTop: 12 }}>
+          <span className="dot">💡</span> {quiz.explanation}
+        </div>
+      )}
+    </>
   );
 }

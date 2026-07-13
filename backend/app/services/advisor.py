@@ -39,22 +39,25 @@ def _ground(portfolio: Portfolio, analytics: Analytics) -> tuple[str, list[str]]
     return "\n".join(lines), facts
 
 
-def answer(message: str, portfolio: Portfolio, analytics: Analytics, history: list[dict]) -> AdvisorResponse:
+def answer(message: str, portfolio: Portfolio, analytics: Analytics, history: list[dict], lang: str = "en") -> AdvisorResponse:
     context, facts = _ground(portfolio, analytics)
     key = os.getenv("ANTHROPIC_API_KEY")
     if key:
         try:
-            return _claude_answer(message, context, facts, history, key)
+            return _claude_answer(message, context, facts, history, key, lang)
         except Exception:
             pass  # fall through to rule-based
-    return _rule_based(message, portfolio, analytics, context, facts)
+    return _rule_based(message, portfolio, analytics, context, facts, lang)
 
 
-def _claude_answer(message, context, facts, history, key) -> AdvisorResponse:
+def _claude_answer(message, context, facts, history, key, lang="en") -> AdvisorResponse:
     import anthropic
 
     client = anthropic.Anthropic(api_key=key)
     model = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-5")
+    system = _SYSTEM
+    if lang == "hi":
+        system += " IMPORTANT: Respond entirely in Hindi (Devanagari script), keeping financial terms like REIT, InvIT, SGB, NSDL, CDSL in English where natural."
     msgs = []
     for turn in history[-6:]:
         role = turn.get("role")
@@ -65,13 +68,15 @@ def _claude_answer(message, context, facts, history, key) -> AdvisorResponse:
         {"role": "user", "content": f"My portfolio context:\n{context}\n\nMy question: {message}"}
     )
     resp = client.messages.create(
-        model=model, max_tokens=700, system=_SYSTEM, messages=msgs
+        model=model, max_tokens=700, system=system, messages=msgs
     )
     text = "".join(block.text for block in resp.content if getattr(block, "type", "") == "text")
     return AdvisorResponse(reply=text.strip(), grounded_on=facts, source="claude")
 
 
-def _rule_based(message, portfolio: Portfolio, analytics: Analytics, context: str, facts: list[str]) -> AdvisorResponse:
+def _rule_based(message, portfolio: Portfolio, analytics: Analytics, context: str, facts: list[str], lang: str = "en") -> AdvisorResponse:
+    if lang == "hi":
+        return _rule_based_hi(message, portfolio, analytics, facts)
     m = message.lower()
     rm = analytics.risk_metrics
     s = portfolio.summary
@@ -123,4 +128,39 @@ def _rule_based(message, portfolio: Portfolio, analytics: Analytics, context: st
     if analytics.insights:
         parts.append("\nTip: " + analytics.insights[0])
     parts.append("\n(Educational only — consult a SEBI-registered adviser for personal advice.)")
+    return AdvisorResponse(reply="\n".join(parts), grounded_on=facts, source="rule-based")
+
+
+def _rule_based_hi(message, portfolio: Portfolio, analytics: Analytics, facts: list[str]) -> AdvisorResponse:
+    """Hindi rule-based fallback grounded on the same real numbers."""
+    m = message.lower()
+    rm = analytics.risk_metrics
+    s = portfolio.summary
+    parts: list[str] = []
+
+    if any(w in m for w in ("concentrat", "over", "risk", "जोखिम", "एकाग्र")):
+        if rm.concentration_flags:
+            parts.append("आपके पोर्टफोलियो में एकाग्रता (concentration) के मुख्य बिंदु:")
+            parts.extend(f"• {f}" for f in rm.concentration_flags)
+        else:
+            parts.append(f"आपका पोर्टफोलियो ठीक-ठाक फैला हुआ है — विविधता स्कोर {rm.diversification_score:.0f}/100 है।")
+    elif any(w in m for w in ("reit", "invit", "bond", "gold", "बॉन्ड", "सोना", "वैकल्पिक")):
+        parts.append(
+            "वैकल्पिक निवेश (alternate assets) इक्विटी से आगे आय और विविधता देते हैं: "
+            "REITs (रियल एस्टेट, ~6–7.5% yield), InvITs (इंफ्रास्ट्रक्चर, ~9–10%), "
+            "corporate bonds/NCDs (निश्चित ब्याज), और Sovereign Gold Bonds (सोना + 2.5% ब्याज)। "
+            "Alt-Asset सेक्शन में हर विकल्प आपकी जोखिम-प्रोफ़ाइल के अनुसार टैग किया गया है।"
+        )
+    elif any(w in m for w in ("profit", "loss", "return", "perform", "मुनाफ़ा", "नुकसान", "प्रदर्शन")):
+        parts.append(
+            f"आपके पोर्टफोलियो का मूल्य ₹{s.total_current_value:,.0f} है, निवेश ₹{s.total_invested:,.0f}। "
+            f"कुल लाभ/हानि ₹{s.total_pnl:,.0f} ({s.total_pnl_pct:+.1f}%) है।"
+        )
+    else:
+        parts.append(
+            f"आपका पोर्टफोलियो ₹{s.total_current_value:,.0f} का है, {s.holdings_count} होल्डिंग्स "
+            f"{len(s.accounts)} खातों में, {rm.equity_pct:.0f}% इक्विटी में, विविधता {rm.diversification_score:.0f}/100। "
+            "एकाग्रता, विविधता, प्रदर्शन या वैकल्पिक निवेश के बारे में पूछें।"
+        )
+    parts.append("\n(केवल शैक्षिक जानकारी — व्यक्तिगत सलाह हेतु SEBI-पंजीकृत सलाहकार से परामर्श करें।)")
     return AdvisorResponse(reply="\n".join(parts), grounded_on=facts, source="rule-based")
