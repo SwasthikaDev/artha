@@ -37,3 +37,7 @@ npm-debug.log*
 
 # TS build info
 *.tsbuildinfo
+
+# SvelteKit
+.svelte-kit/
+frontend/build/
