@@ -131,6 +131,4 @@ UnifyInvest brings both sides together in one intelligent dashboard. It **consol
 
 ## GitHub Repository Link (if any)
 
-*To be added — repository is being built at `c:\Projects\hackathons\sebi-gff-hackathon`. Push to GitHub and paste the URL here.*
-
-`https://github.com/<your-username>/unifyinvest` *(placeholder)*
+**https://github.com/SwasthikaDev/artha**
