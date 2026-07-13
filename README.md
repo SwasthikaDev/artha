@@ -19,7 +19,7 @@ for institutional and HNI investors, reimagined for every retail participant.
 
 ## Tech stack
 
-- **Frontend:** React 18 + TypeScript (Vite), Recharts, Tailwind CSS
+- **Frontend:** SvelteKit (Svelte 5) + TypeScript, Chart.js
 - **Backend:** Python + FastAPI, Pydantic, pandas / NumPy
 - **Market data:** AlphaVantage (seeded fallback for offline demos)
 - **AI advisor:** Claude (Anthropic) API, grounded on the user's portfolio
@@ -70,9 +70,9 @@ backend/
   requirements.txt
 frontend/
   src/
-    pages/             the 5 pillars
-    components/        shared UI + charts
-    api/               typed API client
+    routes/            the app pages (SvelteKit file-based routing)
+    lib/api/           typed API client
+    lib/components/    shared UI + charts
 docs/                  architecture + submission
 ```
 
