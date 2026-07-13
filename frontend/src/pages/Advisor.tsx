@@ -38,8 +38,8 @@ export default function Advisor() {
         role: "assistant",
         content:
           lang === "hi"
-            ? "नमस्ते! मैं आपका UnifyInvest सलाहकार हूँ। मैं आपके सभी खातों का समेकित पोर्टफोलियो देख सकता हूँ। एकाग्रता, विविधता, प्रदर्शन या वैकल्पिक निवेश के बारे में पूछें।"
-            : "Hi! I'm your UnifyInvest advisor. I can see your consolidated portfolio across all your accounts. Ask me about concentration, diversification, performance, or alternate assets.",
+            ? "नमस्ते! मैं आपका Artha सलाहकार हूँ। मैं आपके सभी खातों का समेकित पोर्टफोलियो देख सकता हूँ। एकाग्रता, विविधता, प्रदर्शन या वैकल्पिक निवेश के बारे में पूछें।"
+            : "Hi! I'm your Artha advisor. I can see your consolidated portfolio across all your accounts. Ask me about concentration, diversification, performance, or alternate assets.",
       },
     ]);
   }, [investorId, lang]);

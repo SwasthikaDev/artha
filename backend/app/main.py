@@ -1,4 +1,4 @@
-"""UnifyInvest API — FastAPI entrypoint.
+"""Artha API — FastAPI entrypoint.
 
 Consolidates a retail investor's multi-asset portfolio and powers the five pillars:
 aggregation, analytics, risk profiling + suitability, alt-asset discovery, and the AI advisor.
@@ -15,7 +15,7 @@ from app.routers import advisor, alt_assets, analytics, insights, portfolio, ris
 from app.services import market_data  # noqa: E402
 
 app = FastAPI(
-    title="UnifyInvest API",
+    title="Artha API",
     description="Unified multi-asset super app for India's retail investors (SEBI GFF Hackathon — PS3).",
     version="1.0.0",
 )

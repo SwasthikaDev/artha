@@ -1,6 +1,6 @@
-# UnifyInvest — Process Flow & Architecture
+# Artha — Process Flow & Architecture
 
-**Project:** UnifyInvest — The Unified Multi-Asset Super App for India's Retail Investors
+**Project:** Artha — The Unified Multi-Asset Super App for India's Retail Investors
 **Problem Statement:** SEBI GFF Hackathon — PS3: Super App for Unified Multi-Asset Investing and Awareness for Retail Investors
 **Document:** System Architecture & Process Flow Specification
 **Version:** 1.0
@@ -9,7 +9,7 @@
 
 ## 1. Overview
 
-UnifyInvest is a secure, consent-driven super app that consolidates a retail investor's holdings across depositories, brokers, and asset classes into a single intelligent dashboard, while simultaneously expanding awareness of and access to alternate instruments (REITs, InvITs, corporate bonds, and emerging products).
+Artha is a secure, consent-driven super app that consolidates a retail investor's holdings across depositories, brokers, and asset classes into a single intelligent dashboard, while simultaneously expanding awareness of and access to alternate instruments (REITs, InvITs, corporate bonds, and emerging products).
 
 The system is organized as a **React single-page frontend** talking over HTTPS/REST to a **FastAPI backend** composed of six cooperating services. The design cleanly separates the *aggregation* concern (getting data in, read-only, with consent) from the *intelligence* concern (analytics, suitability, and AI advice).
 
@@ -186,7 +186,7 @@ Cross-cutting: Recharts/D3 for visualization, Tailwind CSS for responsive and th
 ## 5. Consent & Data-Flow (Account Aggregator model)
 
 ```
-Investor ──consent request──▶ UnifyInvest
+Investor ──consent request──▶ Artha
    ▲                              │
    │                              │ consent artifact
    │                              ▼
@@ -202,11 +202,11 @@ Investor ──consent request──▶ UnifyInvest
    └──────────────────────────────┘
             read-only, purpose-limited, time-bound
 
-FIP = Financial Information Provider   ·   UnifyInvest acts as FIU (Financial Information User)
+FIP = Financial Information Provider   ·   Artha acts as FIU (Financial Information User)
 ```
 
 - **Purpose-limited & time-bound:** consent specifies scope and expiry.
-- **Read-only:** UnifyInvest is a Financial Information User (FIU); it never initiates transactions on custody.
+- **Read-only:** Artha is a Financial Information User (FIU); it never initiates transactions on custody.
 - **Revocable:** the investor can withdraw consent at any time.
 - **Prototype note:** in the hackathon build this flow is simulated with realistic seed portfolios; the interface is designed so a live AA connector drops in without changing downstream services.
 
@@ -257,7 +257,7 @@ FIP = Financial Information Provider   ·   UnifyInvest acts as FIU (Financial I
 
 ## 9. Mapping to PS3 Requirements
 
-| PS3 desired outcome | UnifyInvest component |
+| PS3 desired outcome | Artha component |
 |---|---|
 | Consolidate holdings across depositories, brokers, asset classes | Aggregation Service + Unified Dashboard |
 | Risk & exposure analytics, transaction intelligence | Analytics Engine + Analytics View |

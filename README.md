@@ -1,10 +1,10 @@
-# UnifyInvest
+# Artha
 
 **The Unified Multi-Asset Super App for India's Retail Investors**
 
 > SEBI GFF Hackathon — Problem Statement 3: Super App for Unified Multi-Asset Investing and Awareness for Retail Investors
 
-UnifyInvest consolidates a retail investor's holdings across depositories, brokers, and asset
+Artha consolidates a retail investor's holdings across depositories, brokers, and asset
 classes into a single intelligent dashboard, and expands awareness of and access to alternate
 instruments (REITs, InvITs, corporate bonds) — the portfolio intelligence previously reserved
 for institutional and HNI investors, reimagined for every retail participant.
@@ -82,3 +82,12 @@ The personal-holdings feed is **simulated** with realistic seed portfolios behin
 production-ready interface (a live Account Aggregator / NSDL-CDSL connector drops in
 without changing downstream services). Analytics, suitability, market data, and the AI
 advisor are **real**.
+
+The production multi-broker engine Artha builds on is proprietary and remains private:
+it runs live integrations to ten brokers (Zerodha, Upstox, Angel One, Dhan, Fyers,
+ICICI Direct, Kotak Neo, 5paisa, Shoonya, IndMoney) with encrypted credential vaults,
+OAuth session lifecycle, and position/order/trade sync into a single schema. The demo
+video shows it running against live broker accounts. In this prototype, that engine's
+place is held by the seed-portfolio feed; `app/services/aa_consent.py` models the
+Account Aggregator consent lifecycle (Sahamati ecosystem) that the production
+connector implements.

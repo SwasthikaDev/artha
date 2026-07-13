@@ -51,7 +51,7 @@ export default function App() {
           <div className="brand">
             <span className="logo">◈</span>
             <div>
-              UnifyInvest
+              Artha
               <small>Multi-asset super app</small>
             </div>
           </div>

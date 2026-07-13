@@ -1,4 +1,4 @@
-# UnifyInvest — SEBI GFF Hackathon Submission
+# Artha — SEBI GFF Hackathon Submission
 
 **Problem Statement 3:** Super App for Unified Multi-Asset Investing and Awareness for Retail Investors
 
@@ -6,7 +6,7 @@
 
 ## Project Title *
 
-**UnifyInvest — The Unified Multi-Asset Super App for India's Retail Investors**
+**Artha — The Unified Multi-Asset Super App for India's Retail Investors**
 
 ---
 
@@ -23,11 +23,11 @@
 
 ## Brief Description of the Idea *
 
-UnifyInvest is a secure, unified investment super app that solves the two compounding problems facing India's retail investors: **portfolio fragmentation** and **low awareness of alternate assets**.
+Artha is a secure, unified investment super app that solves the two compounding problems facing India's retail investors: **portfolio fragmentation** and **low awareness of alternate assets**.
 
 Today an investor's holdings are scattered across multiple demat and trading accounts, depositories (NSDL/CDSL), and asset classes — with no single view of total holdings, exposure, or risk. At the same time, retail participation is dangerously skewed toward equities, with poor understanding of instruments like REITs, InvITs, and corporate bonds.
 
-UnifyInvest brings both sides together in one intelligent dashboard. It **consolidates holdings across brokers, depositories, and asset classes** (modeled on the RBI Account Aggregator framework and the SEBI-NSDL-CDSL Unified Investor Platform), layers on **institutional-grade risk and exposure analytics**, and pairs this with **interactive product education, risk profiling, and a suitability engine** that helps investors safely discover and assess alternate assets. An **AI advisor**, grounded on the investor's own portfolio, answers plain-language questions like *"Am I over-concentrated in IT stocks?"* — delivering the kind of portfolio intelligence previously reserved for institutional and HNI investors, reimagined for every retail participant in India's securities markets.
+Artha brings both sides together in one intelligent dashboard. It **consolidates holdings across brokers, depositories, and asset classes** (modeled on the RBI Account Aggregator framework and the SEBI-NSDL-CDSL Unified Investor Platform), layers on **institutional-grade risk and exposure analytics**, and pairs this with **interactive product education, risk profiling, and a suitability engine** that helps investors safely discover and assess alternate assets. An **AI advisor**, grounded on the investor's own portfolio, answers plain-language questions like *"Am I over-concentrated in IT stocks?"* — delivering the kind of portfolio intelligence previously reserved for institutional and HNI investors, reimagined for every retail participant in India's securities markets.
 
 ---
 
@@ -131,4 +131,6 @@ UnifyInvest brings both sides together in one intelligent dashboard. It **consol
 
 ## GitHub Repository Link (if any)
 
-**https://github.com/SwasthikaDev/artha**
+*To be added — repository is being built at `c:\Projects\hackathons\sebi-gff-hackathon`. Push to GitHub and paste the URL here.*
+
+`https://github.com/<your-username>/artha` *(placeholder)*
